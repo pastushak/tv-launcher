@@ -1,0 +1,44 @@
+name: Збірка APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Зібрати APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Перейменувати APK
+        run: cp app/build/outputs/apk/release/app-release.apk TvLauncher-${{ github.run_number }}.apk
+
+      - name: Зберегти як артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: TvLauncher-apk
+          path: TvLauncher-*.apk
+
+      - name: Опублікувати у Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: TV Лаунчер, збірка ${{ github.run_number }}
+          body: Завантажте файл TvLauncher-${{ github.run_number }}.apk нижче й встановіть на телевізор.
+          files: TvLauncher-*.apk

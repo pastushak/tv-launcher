@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TV Лаунчер</string>
+    <string name="home_service_label">TV Лаунчер: кнопка Home</string>
+    <string name="home_service_description">Коли відкривається стандартний головний екран Android TV, служба одразу показує TV Лаунчер. Служба не читає вміст екрана й реагує лише на стандартний лаунчер.</string>
+</resources>
